@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.5em;
+  }
+
+  h1 {
+    font-size: 1.875rem; /* 30px */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* 24px */
+  }
+
+  h3 {
+    font-size: 1.25rem; /* 20px */
+  }
+
+  h4 {
+    font-size: 1.125rem; /* 18px */
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    text-decoration: none;
+    @apply text-primary-accent transition-colors duration-200;
+  }
+
+  a:hover {
+    @apply text-primary-light;
+  }
+
+  button {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+
+  input, select, textarea {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  /* Light mode scrollbar */
+  .light ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: #f1f5f9;
+  }
+
+  .light ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+
+  .light ::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+  }
+
+  /* Dark mode scrollbar */
+  .dark ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: #1e293b;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 4px;
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-sm text-white bg-primary-DEFAULT hover:bg-primary-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-light transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply inline-flex justify-center py-2 px-4 border shadow-sm text-sm font-medium rounded-sm bg-white text-primary-DEFAULT border-primary-DEFAULT hover:bg-primary-DEFAULT hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-DEFAULT transition-colors duration-200;
+  }
+
+  .input-field {
+    @apply mt-1 block w-full rounded-sm border-neutral-lighter shadow-sm focus:border-primary-accent focus:ring-1 focus:ring-primary-accent;
+  }
+
+  .input-field-dark {
+    @apply mt-1 block w-full rounded-sm bg-neutral-DEFAULT border-neutral-light shadow-sm focus:border-primary-accent focus:ring-1 focus:ring-primary-accent;
+  }
+
+  .card {
+    @apply bg-white dark:bg-neutral-DEFAULT border border-neutral-lightest dark:border-neutral-light rounded-sm shadow-card transition-shadow duration-200 hover:shadow-card-hover;
+  }
+
+  .card-header {
+    @apply px-6 py-4 border-b border-neutral-lightest dark:border-neutral-light;
+  }
+
+  .card-body {
+    @apply p-6;
+  }
+
+  .data-table {
+    @apply min-w-full divide-y divide-neutral-lightest dark:divide-neutral-light;
+  }
+
+  .data-table-header {
+    @apply bg-neutral-lightest dark:bg-neutral-light;
+  }
+
+  .data-table-header-cell {
+    @apply px-6 py-3 text-left text-xs font-medium text-neutral-DEFAULT dark:text-white uppercase tracking-wider;
+  }
+
+  .data-table-body {
+    @apply divide-y divide-neutral-lightest dark:divide-neutral-light;
+  }
+
+  .data-table-row {
+    @apply bg-white dark:bg-neutral-DEFAULT;
+  }
+
+  .data-table-row-alt {
+    @apply bg-neutral-lightest dark:bg-neutral-light bg-opacity-50;
+  }
+
+  .data-table-cell {
+    @apply px-6 py-4 whitespace-nowrap text-sm text-neutral-light dark:text-neutral-lighter;
+  }
+}
