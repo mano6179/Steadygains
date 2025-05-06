@@ -18,68 +18,60 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* NAV Tracker Card */}
-        <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-secondary-DEFAULT border border-secondary-light' : 'bg-white border border-neutral-lightest'}`}>
-          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-secondary-DEFAULT'}`}>NAV Tracker</h3>
+        {/* NAV Card */}
+        <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
+          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-secondary-DEFAULT'}`}>NAV</h3>
           <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-            Track the Net Asset Value of your investments over time.
+            Track the Net Asset Value of your investments over time. The graph will automatically scale as new data points are added weekly.
           </p>
-          <div className="flex space-x-3">
-            <Link
-              to="/nav-tracker"
-              className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-secondary-light text-white' : 'bg-secondary-DEFAULT text-white'} hover:bg-secondary-light transition-colors duration-200`}
-            >
-              View NAV Tracker
-            </Link>
-            <Link
-              to="/nav-tracker-detailed"
-              className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'border border-secondary-light text-secondary-light' : 'border border-secondary-DEFAULT text-secondary-DEFAULT'} hover:bg-secondary-DEFAULT hover:text-white transition-colors duration-200`}
-            >
-              Detailed View
-            </Link>
-          </div>
+          <Link
+            to="/nav-tracker-detailed"
+            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
+          >
+            View NAV
+          </Link>
         </div>
 
-        {/* Weekly Updates Card */}
-        <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-light border border-primary-DEFAULT' : 'bg-white border border-neutral-lightest'}`}>
-          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-light'}`}>Weekly Updates</h3>
+        {/* Activity Logs Card */}
+        <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
+          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>Activity Logs</h3>
           <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-            View weekly performance updates and fund reports.
+            View all activity logs including IV tracker, trades, market updates, and weekly profits.
           </p>
           <Link
             to="/weekly-updates"
-            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-DEFAULT text-white' : 'bg-primary-light text-white'} hover:bg-primary-DEFAULT transition-colors duration-200`}
+            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
           >
-            View Updates
+            View Logs
           </Link>
         </div>
 
         {/* Admin-only cards */}
         {isAdmin() && (
           <>
-            <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-secondary-dark border border-secondary-DEFAULT' : 'bg-white border border-neutral-lightest'}`}>
+            <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
               <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-secondary-dark'}`}>Trade Log</h3>
               <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
                 Record and track all your trading activities.
               </p>
               <Link
                 to="/trade-log"
-                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-secondary-DEFAULT text-white' : 'bg-secondary-dark text-white'} hover:bg-secondary-DEFAULT transition-colors duration-200`}
+                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-dark text-white'} hover:bg-primary-light transition-colors duration-200`}
               >
                 View Trade Log
               </Link>
             </div>
 
-            <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-accent-blue border border-primary-accent' : 'bg-white border border-neutral-lightest'}`}>
-              <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-accent-blue'}`}>Add Weekly Update</h3>
+            <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
+              <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-accent-blue'}`}>Logger</h3>
               <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-                Create a new weekly performance update.
+                Log IV tracker, trades, market updates, and weekly profits.
               </p>
               <Link
-                to="/weekly-update"
-                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-accent text-white' : 'bg-accent-blue text-white'} hover:bg-primary-accent transition-colors duration-200`}
+                to="/logger"
+                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-accent-blue text-white'} hover:bg-primary-light transition-colors duration-200`}
               >
-                Add Update
+                Open Logger
               </Link>
             </div>
 
