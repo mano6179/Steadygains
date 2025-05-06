@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Steadygains/static/css/main.05f72fa7.css",
+    "main.js": "/Steadygains/static/js/main.2f15a3d4.js",
+    "index.html": "/Steadygains/index.html",
+    "main.05f72fa7.css.map": "/Steadygains/static/css/main.05f72fa7.css.map",
+    "main.2f15a3d4.js.map": "/Steadygains/static/js/main.2f15a3d4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.05f72fa7.css",
+    "static/js/main.2f15a3d4.js"
+  ]
+}
