@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Steadygains/static/css/main.d292dfa4.css",
-    "main.js": "/Steadygains/static/js/main.9a8ce8e1.js",
+    "main.css": "/Steadygains/static/css/main.99f68e53.css",
+    "main.js": "/Steadygains/static/js/main.8cf46a1d.js",
     "index.html": "/Steadygains/index.html",
-    "main.d292dfa4.css.map": "/Steadygains/static/css/main.d292dfa4.css.map",
-    "main.9a8ce8e1.js.map": "/Steadygains/static/js/main.9a8ce8e1.js.map"
+    "main.99f68e53.css.map": "/Steadygains/static/css/main.99f68e53.css.map",
+    "main.8cf46a1d.js.map": "/Steadygains/static/js/main.8cf46a1d.js.map"
   },
   "entrypoints": [
-    "static/css/main.d292dfa4.css",
-    "static/js/main.9a8ce8e1.js"
+    "static/css/main.99f68e53.css",
+    "static/js/main.8cf46a1d.js"
   ]
 }
