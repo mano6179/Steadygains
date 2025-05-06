@@ -90,11 +90,39 @@ export const Select = ({ label, options, className, ...props }) => {
         {...props}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            className="bg-white text-black"
+          >
             {option.label}
           </option>
         ))}
       </select>
+    </div>
+  );
+};
+
+// Textarea component with financial sector styling
+export const Textarea = ({ label, className, rows = 4, ...props }) => {
+  const { isDarkMode } = useTheme();
+
+  return (
+    <div className="mb-4">
+      {label && (
+        <label className={`block text-sm font-medium ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'} mb-2`}>
+          {label}
+        </label>
+      )}
+      <textarea
+        rows={rows}
+        className={`w-full px-3 py-2 ${
+          isDarkMode
+            ? 'bg-neutral-DEFAULT border-neutral-light text-white'
+            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+        } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
+        {...props}
+      />
     </div>
   );
 };

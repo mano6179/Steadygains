@@ -18,13 +18,12 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 const navigation = [
   { name: 'Dashboard', href: '/', icon: <DashboardIcon fontSize="small" />, roles: ['admin', 'investor'] },
   { name: 'Trade Log', href: '/trade-log', icon: <BarChartIcon fontSize="small" />, roles: ['admin'] },
-  { name: 'NAV Tracker', href: '/nav-tracker', icon: <ShowChartIcon fontSize="small" />, roles: ['admin', 'investor'] },
-  { name: 'NAV Detailed', href: '/nav-tracker-detailed', icon: <ShowChartIcon fontSize="small" />, roles: ['admin', 'investor'] },
+  { name: 'NAV', href: '/nav-tracker-detailed', icon: <ShowChartIcon fontSize="small" />, roles: ['admin', 'investor'] },
   { name: 'Indicators', href: '/indicators', icon: <SignalCellularAltIcon fontSize="small" />, roles: ['admin'] },
   { name: 'Economic Calendar', href: '/economic-calendar', icon: <CalendarMonthIcon fontSize="small" />, roles: ['admin'] },
   { name: 'Excel Upload', href: '/excel-upload', icon: <UploadFileIcon fontSize="small" />, roles: ['admin'] },
-  { name: 'Add Weekly Update', href: '/weekly-update', icon: <AddIcon fontSize="small" />, roles: ['admin'] },
-  { name: 'View Updates', href: '/weekly-updates', icon: <ListAltIcon fontSize="small" />, roles: ['admin', 'investor'] },
+  { name: 'Logger', href: '/logger', icon: <AddIcon fontSize="small" />, roles: ['admin'] },
+  { name: 'Activity Logs', href: '/weekly-updates', icon: <ListAltIcon fontSize="small" />, roles: ['admin', 'investor'] },
 ];
 
 function Layout({ children }) {

@@ -1,10 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
-import WeeklyUpdateForm from './pages/WeeklyUpdateForm';
+import LoggerForm from './pages/LoggerForm';
 import WeeklyUpdatesList from './pages/WeeklyUpdatesList';
 import Dashboard from './pages/Dashboard';
-import NAVTracker from './pages/NAVTracker';
 import NAVTrackerDetailed from './pages/NAVTrackerDetailed';
 import Login from './pages/Login';
 import TradeLog from './pages/TradeLog';
@@ -31,10 +30,10 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path="/weekly-update" element={
+            <Route path="/logger" element={
               <ProtectedRoute requiredRole="admin">
                 <Layout>
-                  <WeeklyUpdateForm />
+                  <LoggerForm />
                 </Layout>
               </ProtectedRoute>
             } />
@@ -43,14 +42,6 @@ function App() {
               <ProtectedRoute>
                 <Layout>
                   <WeeklyUpdatesList />
-                </Layout>
-              </ProtectedRoute>
-            } />
-
-            <Route path="/nav-tracker" element={
-              <ProtectedRoute>
-                <Layout>
-                  <NAVTracker />
                 </Layout>
               </ProtectedRoute>
             } />

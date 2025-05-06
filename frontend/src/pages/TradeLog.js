@@ -3,10 +3,13 @@ import { useTheme } from '../context/ThemeContext';
 import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { Card } from '../components/FormElements';
 
 function TradeLog() {
   const { isDarkMode } = useTheme();
   const [trades, setTrades] = useState([]);
+  const [activeTrades, setActiveTrades] = useState([]);
+  const [lastMarketUpdate, setLastMarketUpdate] = useState(null);
   const [formData, setFormData] = useState({
     symbol: '',
     strategy: '',
@@ -20,6 +23,8 @@ function TradeLog() {
 
   useEffect(() => {
     fetchTrades();
+    fetchActiveTrades();
+    fetchLastMarketUpdate();
   }, []);
 
   const fetchTrades = async () => {
@@ -28,6 +33,64 @@ function TradeLog() {
       setTrades(response.data);
     } catch (error) {
       console.error('Error fetching trades:', error);
+    }
+  };
+
+  const fetchActiveTrades = async () => {
+    try {
+      // In a real app, this would be an API call
+      // const response = await axios.get('http://localhost:8000/api/trades/active');
+
+      // Mock data for demonstration
+      const mockActiveTrades = [
+        {
+          id: 1,
+          symbol: 'NIFTY',
+          strategy: 'Iron Condor',
+          entry_exit: 'entry',
+          quantity: 50,
+          premium: 1500,
+          date: '2023-06-15',
+          notes: 'Weekly expiry trade',
+          realized_pnl: 0,
+          unrealized_pnl: 300
+        },
+        {
+          id: 2,
+          symbol: 'BANKNIFTY',
+          strategy: 'Strangle',
+          entry_exit: 'entry',
+          quantity: 25,
+          premium: 2200,
+          date: '2023-06-18',
+          notes: 'Monthly expiry trade',
+          realized_pnl: 0,
+          unrealized_pnl: -150
+        }
+      ];
+
+      setActiveTrades(mockActiveTrades);
+    } catch (error) {
+      console.error('Error fetching active trades:', error);
+    }
+  };
+
+  const fetchLastMarketUpdate = async () => {
+    try {
+      // In a real app, this would be an API call
+      // const response = await axios.get('http://localhost:8000/api/market-updates/latest');
+
+      // Mock data for demonstration
+      const mockLastUpdate = {
+        id: 1,
+        title: 'Market Update - June 20, 2023',
+        content: 'Markets closed higher today with Nifty up 0.8% and Bank Nifty up 1.2%. FIIs were net buyers while DIIs were net sellers. Global markets were mixed with US futures pointing slightly higher.',
+        timestamp: '2023-06-20T16:30:00'
+      };
+
+      setLastMarketUpdate(mockLastUpdate);
+    } catch (error) {
+      console.error('Error fetching last market update:', error);
     }
   };
 
@@ -56,6 +119,7 @@ function TradeLog() {
         tags: [],
       });
       fetchTrades();
+      fetchActiveTrades();
     } catch (error) {
       console.error('Error creating trade:', error);
     }
@@ -187,49 +251,73 @@ function TradeLog() {
         </form>
       </div>
 
-      <div className={`p-6 rounded-lg shadow ${
-        isDarkMode ? 'bg-gray-800' : 'bg-white'
-      }`}>
-        <h2 className="text-xl font-bold mb-4">Trade History</h2>
+      <Card title="Active Trades">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Symbol</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Strategy</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Entry/Exit</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Premium</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">PnL</th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Delete</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {trades.map((trade) => (
-                <tr key={trade.id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{trade.symbol}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{trade.strategy}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{trade.entry_exit}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{trade.quantity}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">₹{trade.premium}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{trade.date}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    ₹{(trade.realized_pnl + trade.unrealized_pnl).toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <IconButton aria-label="delete" color="error" onClick={() => handleDelete(trade.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                  </td>
+          {activeTrades.length === 0 ? (
+            <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+              No active trades found.
+            </p>
+          ) : (
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className={isDarkMode ? 'bg-neutral-light' : 'bg-neutral-lightest'}>
+                <tr>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Symbol</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Strategy</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Quantity</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Premium</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Date</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Current P&L</th>
+                  <th className={`px-6 py-3 text-left text-xs font-medium ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} uppercase tracking-wider`}>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className={`divide-y ${isDarkMode ? 'divide-neutral-light bg-neutral-DEFAULT' : 'divide-neutral-lightest bg-white'}`}>
+                {activeTrades.map((trade) => (
+                  <tr key={trade.id}>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.symbol}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.strategy}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.quantity}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>₹{trade.premium}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.date}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${trade.unrealized_pnl >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
+                      ₹{trade.unrealized_pnl.toFixed(2)}
+                    </td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+                      <IconButton aria-label="delete" color="error" onClick={() => handleDelete(trade.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
-      </div>
+      </Card>
+
+      {/* Last Market Update */}
+      <Card title="Latest Market Update">
+        {!lastMarketUpdate ? (
+          <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+            No market updates found.
+          </p>
+        ) : (
+          <div className={`p-4 rounded-sm ${isDarkMode ? 'bg-neutral-DEFAULT' : 'bg-white'}`}>
+            <div className="flex justify-between items-center mb-2">
+              <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+                {lastMarketUpdate.title}
+              </h3>
+              <span className={`text-sm ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>
+                {new Date(lastMarketUpdate.timestamp).toLocaleString()}
+              </span>
+            </div>
+            <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+              {lastMarketUpdate.content}
+            </p>
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
 
-export default TradeLog; 
+export default TradeLog;
