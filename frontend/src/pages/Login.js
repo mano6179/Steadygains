@@ -71,10 +71,6 @@ const Login = () => {
               </div>
             )}
 
-            <div className="mb-4 p-3 bg-navTracker bg-opacity-20 border border-navTracker rounded">
-              <p><strong>Admin:</strong> admin@steadygains.com / password</p>
-              <p><strong>Investor:</strong> investor@steadygains.com / password</p>
-            </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
