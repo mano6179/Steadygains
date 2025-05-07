@@ -170,6 +170,14 @@ const LandingPage = () => {
     });
   };
 
+  // Function to scroll to a section when nav link is clicked
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-bgDark text-white' : 'bg-neutral-lightest text-neutral-DEFAULT'}`}>
       {/* Navigation Bar */}
@@ -178,15 +186,40 @@ const LandingPage = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <a href="#" className="text-white text-xl font-bold">Steady Gains</a>
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="text-white text-xl font-bold"
+              >
+                Steady Gains
+              </button>
             </div>
 
             {/* Navigation Links - Desktop */}
             <div className="hidden md:flex items-center space-x-6">
-              <a href="#about" className="text-white hover:text-white/80 transition-colors duration-200">About</a>
-              <a href="#aspirations" className="text-white hover:text-white/80 transition-colors duration-200">Aspirations</a>
-              <a href="#market-updates" className="text-white hover:text-white/80 transition-colors duration-200">Market Updates</a>
-              <a href="#contact" className="text-white hover:text-white/80 transition-colors duration-200">Contact</a>
+              <button
+                onClick={() => scrollToSection('about')}
+                className="text-white hover:text-white/80 transition-colors duration-200"
+              >
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection('aspirations')}
+                className="text-white hover:text-white/80 transition-colors duration-200"
+              >
+                Aspirations
+              </button>
+              <button
+                onClick={() => scrollToSection('market-updates')}
+                className="text-white hover:text-white/80 transition-colors duration-200"
+              >
+                Market Updates
+              </button>
+              <button
+                onClick={() => scrollToSection('contact')}
+                className="text-white hover:text-white/80 transition-colors duration-200"
+              >
+                Contact
+              </button>
             </div>
 
             {/* Login Button - Desktop */}
@@ -243,34 +276,42 @@ const LandingPage = () => {
               </div>
 
               <div className="flex flex-col space-y-4">
-                <a
-                  href="#about"
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10"
-                  onClick={() => setMobileMenuOpen(false)}
+                <button
+                  onClick={() => {
+                    scrollToSection('about');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
                 >
                   About
-                </a>
-                <a
-                  href="#aspirations"
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10"
-                  onClick={() => setMobileMenuOpen(false)}
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection('aspirations');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
                 >
                   Aspirations
-                </a>
-                <a
-                  href="#market-updates"
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10"
-                  onClick={() => setMobileMenuOpen(false)}
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection('market-updates');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
                 >
                   Market Updates
-                </a>
-                <a
-                  href="#contact"
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10"
-                  onClick={() => setMobileMenuOpen(false)}
+                </button>
+                <button
+                  onClick={() => {
+                    scrollToSection('contact');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
                 >
                   Contact
-                </a>
+                </button>
               </div>
             </div>
           </div>
@@ -556,10 +597,10 @@ const LandingPage = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2 text-sm">
-                <li><a href="#about" className="text-white/80 hover:text-white transition-colors duration-200">About</a></li>
-                <li><a href="#aspirations" className="text-white/80 hover:text-white transition-colors duration-200">Aspirations</a></li>
-                <li><a href="#market-updates" className="text-white/80 hover:text-white transition-colors duration-200">Market Updates</a></li>
-                <li><a href="#contact" className="text-white/80 hover:text-white transition-colors duration-200">Contact</a></li>
+                <li><button onClick={() => scrollToSection('about')} className="text-white/80 hover:text-white transition-colors duration-200">About</button></li>
+                <li><button onClick={() => scrollToSection('aspirations')} className="text-white/80 hover:text-white transition-colors duration-200">Aspirations</button></li>
+                <li><button onClick={() => scrollToSection('market-updates')} className="text-white/80 hover:text-white transition-colors duration-200">Market Updates</button></li>
+                <li><button onClick={() => scrollToSection('contact')} className="text-white/80 hover:text-white transition-colors duration-200">Contact</button></li>
               </ul>
             </div>
 
