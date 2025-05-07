@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Select, Card, Textarea, Table } from '../components/FormElements';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Button, Input, Select, Card, Textarea } from '../components/FormElements';
+// import axios from 'axios'; // Uncomment when API integration is needed
 import { useTheme } from '../context/ThemeContext';
 
 const LoggerForm = () => {
@@ -39,7 +38,6 @@ const LoggerForm = () => {
   const [loading, setLoading] = useState(false);
   const [logs, setLogs] = useState([]);
   const [logsLoading, setLogsLoading] = useState(true);
-  const navigate = useNavigate();
 
   // Fetch logs when component mounts
   useEffect(() => {

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
+// API_URL is commented out as it's not currently used, but kept for future reference
+// import { API_URL } from '../config';
 
 const AuthContext = createContext();
 
