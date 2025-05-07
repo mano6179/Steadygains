@@ -14,7 +14,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 function PublicLayout({ children }) {
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -57,9 +57,12 @@ function PublicLayout({ children }) {
         <header className={`${isDarkMode ? 'bg-bgDark' : 'bg-white'} border-b border-neutral-lightest shadow-sm z-10`}>
           <div className="flex justify-between items-center px-6 py-4">
             <div className="flex items-center">
-              <h2 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+              <button
+                onClick={() => navigate(currentUser ? '/dashboard' : '/')}
+                className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'} hover:opacity-80 transition-opacity duration-200`}
+              >
                 Steady Gains
-              </h2>
+              </button>
             </div>
 
             {/* Navigation */}
@@ -74,7 +77,7 @@ function PublicLayout({ children }) {
                     to={item.href}
                     className={`flex items-center px-3 py-2 rounded-md transition-colors duration-200 ${
                       isActive
-                        ? `${isDarkMode ? 'bg-primary-dark text-white' : 'bg-primary-DEFAULT text-white'}`
+                        ? `${isDarkMode ? 'bg-primary-dark text-white' : 'bg-primary-DEFAULT text-black'}`
                         : `${isDarkMode ? 'text-neutral-lighter hover:text-white' : 'text-neutral-DEFAULT hover:text-primary-DEFAULT'}`
                     }`}
                   >
@@ -99,18 +102,31 @@ function PublicLayout({ children }) {
                 {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
               </button>
 
-              {/* Login button */}
-              <button
-                onClick={() => setLoginSliderOpen(true)}
-                className={`flex items-center px-3 py-2 rounded-md ${
-                  isDarkMode
-                    ? 'bg-primary-DEFAULT text-white hover:bg-primary-light'
-                    : 'bg-primary-DEFAULT text-white hover:bg-primary-light'
-                }`}
-              >
-                <LoginIcon className="mr-2" fontSize="small" />
-                <span>Login</span>
-              </button>
+              {/* Login/Dashboard button */}
+              {currentUser ? (
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className={`flex items-center px-3 py-2 rounded-md ${
+                    isDarkMode
+                      ? 'bg-primary-DEFAULT text-white hover:bg-primary-light'
+                      : 'bg-primary-DEFAULT text-black hover:bg-primary-light'
+                  }`}
+                >
+                  <span>Dashboard</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setLoginSliderOpen(true)}
+                  className={`flex items-center px-3 py-2 rounded-md ${
+                    isDarkMode
+                      ? 'bg-primary-DEFAULT text-white hover:bg-primary-light'
+                      : 'bg-primary-DEFAULT text-black hover:bg-primary-light'
+                  }`}
+                >
+                  <LoginIcon className="mr-2" fontSize="small" />
+                  <span>Login</span>
+                </button>
+              )}
             </div>
           </div>
         </header>
@@ -121,7 +137,7 @@ function PublicLayout({ children }) {
         </main>
 
         {/* Footer */}
-        <footer className={`py-4 px-6 ${isDarkMode ? 'bg-bgDark text-neutral-lighter' : 'bg-white text-neutral-light'} border-t border-neutral-lightest`}>
+        <footer className={`py-4 px-6 ${isDarkMode ? 'bg-blue-900' : 'bg-blue-800'} text-white shadow-md`}>
           <div className="text-center text-sm">
             © 2025 Steady Gains
           </div>
@@ -129,7 +145,7 @@ function PublicLayout({ children }) {
       </div>
 
       {/* Login Slider */}
-      {loginSliderOpen && (
+      {loginSliderOpen && !currentUser && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-75 flex justify-end">
           <div
             className={`w-full max-w-md h-full ${

@@ -30,7 +30,7 @@ const Dashboard = () => {
           </p>
           <Link
             to="/nav-tracker-detailed"
-            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
+            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-DEFAULT text-black'} hover:bg-primary-light transition-colors duration-200`}
           >
             View NAV
           </Link>
@@ -49,7 +49,7 @@ const Dashboard = () => {
           </p>
           <Link
             to={isAdmin() ? '/weekly-updates' : '/market-updates'}
-            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
+            className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-black'} hover:bg-primary-light transition-colors duration-200`}
           >
             {isAdmin() ? 'View Logs' : 'View Updates'}
           </Link>
@@ -65,7 +65,7 @@ const Dashboard = () => {
               </p>
               <Link
                 to="/trade-log"
-                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-dark text-white'} hover:bg-primary-light transition-colors duration-200`}
+                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-secondary-dark text-black'} hover:bg-primary-light transition-colors duration-200`}
               >
                 View Trade Log
               </Link>
@@ -78,7 +78,7 @@ const Dashboard = () => {
               </p>
               <Link
                 to="/logger"
-                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-accent-blue text-white'} hover:bg-primary-light transition-colors duration-200`}
+                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-accent-blue text-black'} hover:bg-primary-light transition-colors duration-200`}
               >
                 Open Logger
               </Link>

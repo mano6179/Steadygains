@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import LoginIcon from '@mui/icons-material/Login';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import BarChartIcon from '@mui/icons-material/BarChart';
-import ShowChartIcon from '@mui/icons-material/ShowChart';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import MenuIcon from '@mui/icons-material/Menu';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import CloseIcon from '@mui/icons-material/Close';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const LandingPage = () => {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode, toggleDarkMode } = useTheme();
   const { login } = useAuth();
   const navigate = useNavigate();
   const [marketUpdates, setMarketUpdates] = useState([]);
@@ -24,12 +26,37 @@ const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginSliderOpen, setLoginSliderOpen] = useState(false);
 
+  // Refs for scrolling to sections
+  const featuresRef = useRef(null);
+  const marketUpdatesRef = useRef(null);
+  const testimonialsRef = useRef(null);
+  const pricingRef = useRef(null);
+
   // Login form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
+
+  // Format timestamp to readable date
+  const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Scroll to section function
+  const scrollToSection = (ref) => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   // Handle login form submission
   const handleLogin = async (e) => {
@@ -67,28 +94,21 @@ const LandingPage = () => {
           type: 'market_update',
           timestamp: '2025-05-05T22:42:00',
           title: 'Caution creeping in?',
-          content: 'Markets saw muted movement today with NIFTY forming a small-bodied candle, signaling indecision. BANKNIFTY faced selling pressure intraday but managed to recover part of its losses by close.\n\nOption chain suggests resistance building near 24,500 and support getting weaker below 24,200. The Put-Call Ratio remained steady at 0.9, showing no strong directional bias.\n\nFIIs stayed mostly inactive on the options front, while Proprietary traders added long calls. Clients were seen shorting puts, indicating retail is still holding bullish expectations.\n\nIn the futures market, FIIs were marginal net buyers, while clients added to short positions. DII participation was flat. FIIs also logged ₹2,600 Cr of inflows in the cash segment, showing underlying buying strength.\n\nDespite the lack of a clear trend today, cautious positioning and resistance near current levels suggest staying light. No strong trade setups unless there\'s a clean break either way.'
+          content: 'Markets saw muted movement today with NIFTY forming a small-bodied candle. The index closed at 24,850, up just 0.2%. Bank NIFTY underperformed, closing down 0.3% at 52,340.\n\nThe market breadth was negative with decliners outnumbering advancers. The India VIX rose 4% to 14.5, indicating some nervousness.\n\nFIIs were net sellers to the tune of ₹1,200 crores while DIIs bought ₹950 crores worth of equities.\n\nGlobal cues are mixed with US futures pointing slightly lower and Asian markets trading flat. Crude oil is stable at $82 per barrel.\n\nThe market seems to be taking a breather after the recent rally. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
         },
         {
           id: 2,
           type: 'market_update',
           timestamp: '2025-05-02T23:07:00',
           title: 'Volatility brewing?',
-          content: 'NIFTY ended flat after swinging both sides, forming a Doji on the daily chart—a classic sign of uncertainty. BANKNIFTY underperformed slightly, unable to reclaim the 52,000 level.\n\nOpen Interest built up on both calls and puts across key strikes, indicating an upcoming move. Resistance still looms around 24,500. PCR cooled off to 0.75, implying growing nervousness.\n\nFIIs remained net buyers of puts, possibly as insurance. Proprietary traders built long straddles. Retail clients increased short calls, reflecting expectations of a ceiling in place.\n\nOn the futures side, positions were largely unchanged. FIIs added ₹1,800 Cr in the cash market, maintaining a steady inflow trend.\n\nThe setup suggests markets are coiling for a move. Direction is unclear, but volatility strategies like long straddles or strangles could be worth exploring with tight risk controls.'
+          content: 'NIFTY ended flat after swinging both sides. The index closed at 24,800, unchanged from yesterday. Bank NIFTY showed strength, closing up 0.5% at 52,500.\n\nThe market breadth was positive with advancers outnumbering decliners. The India VIX dropped 2% to 13.9, indicating reduced fear.\n\nFIIs were net buyers to the tune of ₹850 crores while DIIs sold ₹650 crores worth of equities.\n\nGlobal cues are positive with US markets closing higher and Asian markets trading in the green. Crude oil is down 1% at $81 per barrel.\n\nThe market seems to be consolidating in a range. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
         },
         {
           id: 3,
           type: 'market_update',
           timestamp: '2025-05-01T22:23:00',
           title: 'Profit booking or pause?',
-          content: 'After a sharp rally, NIFTY paused with a small red candle, showing signs of fatigue. BANKNIFTY followed suit, failing to hold higher levels by the close.\n\nOptions data indicates resistance stacking up at 24,400 and 24,500, while support near 24,100 is seeing unwinding. PCR dropped from 1.1 to 0.85, signaling increased caution.\n\nFIIs stayed light in the options space today, while Proprietary traders hedged via put buying. Clients took the contrarian view, selling both puts and calls aggressively.\n\nFutures activity was neutral. Cash market action saw mild FII selling to the tune of ₹700 Cr—nothing alarming but a change in tone.\n\nGiven the signals, short-term consolidation or dip cannot be ruled out. Better to wait for confirmation before jumping into fresh trades.'
-        },
-        {
-          id: 4,
-          type: 'market_update',
-          timestamp: '2025-04-30T22:38:00',
-          title: 'Strong open, weak close',
-          content: 'Markets opened strong on global cues but couldn\'t sustain gains. NIFTY closed with an upper wick, forming a potential reversal signal. BANKNIFTY showed more weakness and lost key support.\n\nOpen Interest built up rapidly on the call side, especially at 24,400 and 24,500. PCR dipped sharply to 0.7, hinting at sentiment turning cautious.\n\nFIIs added both calls and puts, with a slight tilt toward puts. Proprietary desks were net neutral, while clients leaned heavily on selling puts, reflecting misplaced optimism.\n\nIn futures, FIIs trimmed some longs and DIIs stepped in with buying. The cash segment saw ₹1,200 Cr of FII inflows, but that failed to lift sentiment.\n\nThe intraday reversal suggests that markets may be preparing for a short-term pullback. It\'s a good zone to protect gains and possibly consider hedged bearish setups.'
+          content: 'Markets saw some profit booking today with NIFTY closing down 0.3% at 24,800. Bank NIFTY also closed lower by 0.4% at 52,250.\n\nThe market breadth was negative with decliners outnumbering advancers. The India VIX rose 3% to 14.2, indicating some nervousness.\n\nFIIs were net sellers to the tune of ₹950 crores while DIIs bought ₹750 crores worth of equities.\n\nGlobal cues are mixed with US futures pointing slightly lower and Asian markets trading flat. Crude oil is stable at $82 per barrel.\n\nThe market seems to be taking a breather after the recent rally. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
         }
       ];
 
@@ -122,28 +142,21 @@ const LandingPage = () => {
             type: 'market_update',
             timestamp: '2025-05-05T22:42:00',
             title: 'Caution creeping in?',
-            content: 'Markets saw muted movement today with NIFTY forming a small-bodied candle, signaling indecision. BANKNIFTY faced selling pressure intraday but managed to recover part of its losses by close.\n\nOption chain suggests resistance building near 24,500 and support getting weaker below 24,200. The Put-Call Ratio remained steady at 0.9, showing no strong directional bias.\n\nFIIs stayed mostly inactive on the options front, while Proprietary traders added long calls. Clients were seen shorting puts, indicating retail is still holding bullish expectations.\n\nIn the futures market, FIIs were marginal net buyers, while clients added to short positions. DII participation was flat. FIIs also logged ₹2,600 Cr of inflows in the cash segment, showing underlying buying strength.\n\nDespite the lack of a clear trend today, cautious positioning and resistance near current levels suggest staying light. No strong trade setups unless there\'s a clean break either way.'
+            content: 'Markets saw muted movement today with NIFTY forming a small-bodied candle. The index closed at 24,850, up just 0.2%. Bank NIFTY underperformed, closing down 0.3% at 52,340.\n\nThe market breadth was negative with decliners outnumbering advancers. The India VIX rose 4% to 14.5, indicating some nervousness.\n\nFIIs were net sellers to the tune of ₹1,200 crores while DIIs bought ₹950 crores worth of equities.\n\nGlobal cues are mixed with US futures pointing slightly lower and Asian markets trading flat. Crude oil is stable at $82 per barrel.\n\nThe market seems to be taking a breather after the recent rally. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
           },
           {
             id: 2,
             type: 'market_update',
             timestamp: '2025-05-02T23:07:00',
             title: 'Volatility brewing?',
-            content: 'NIFTY ended flat after swinging both sides, forming a Doji on the daily chart—a classic sign of uncertainty. BANKNIFTY underperformed slightly, unable to reclaim the 52,000 level.\n\nOpen Interest built up on both calls and puts across key strikes, indicating an upcoming move. Resistance still looms around 24,500. PCR cooled off to 0.75, implying growing nervousness.\n\nFIIs remained net buyers of puts, possibly as insurance. Proprietary traders built long straddles. Retail clients increased short calls, reflecting expectations of a ceiling in place.\n\nOn the futures side, positions were largely unchanged. FIIs added ₹1,800 Cr in the cash market, maintaining a steady inflow trend.\n\nThe setup suggests markets are coiling for a move. Direction is unclear, but volatility strategies like long straddles or strangles could be worth exploring with tight risk controls.'
+            content: 'NIFTY ended flat after swinging both sides. The index closed at 24,800, unchanged from yesterday. Bank NIFTY showed strength, closing up 0.5% at 52,500.\n\nThe market breadth was positive with advancers outnumbering decliners. The India VIX dropped 2% to 13.9, indicating reduced fear.\n\nFIIs were net buyers to the tune of ₹850 crores while DIIs sold ₹650 crores worth of equities.\n\nGlobal cues are positive with US markets closing higher and Asian markets trading in the green. Crude oil is down 1% at $81 per barrel.\n\nThe market seems to be consolidating in a range. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
           },
           {
             id: 3,
             type: 'market_update',
             timestamp: '2025-05-01T22:23:00',
             title: 'Profit booking or pause?',
-            content: 'After a sharp rally, NIFTY paused with a small red candle, showing signs of fatigue. BANKNIFTY followed suit, failing to hold higher levels by the close.\n\nOptions data indicates resistance stacking up at 24,400 and 24,500, while support near 24,100 is seeing unwinding. PCR dropped from 1.1 to 0.85, signaling increased caution.\n\nFIIs stayed light in the options space today, while Proprietary traders hedged via put buying. Clients took the contrarian view, selling both puts and calls aggressively.\n\nFutures activity was neutral. Cash market action saw mild FII selling to the tune of ₹700 Cr—nothing alarming but a change in tone.\n\nGiven the signals, short-term consolidation or dip cannot be ruled out. Better to wait for confirmation before jumping into fresh trades.'
-          },
-          {
-            id: 4,
-            type: 'market_update',
-            timestamp: '2025-04-30T22:38:00',
-            title: 'Strong open, weak close',
-            content: 'Markets opened strong on global cues but couldn\'t sustain gains. NIFTY closed with an upper wick, forming a potential reversal signal. BANKNIFTY showed more weakness and lost key support.\n\nOpen Interest built up rapidly on the call side, especially at 24,400 and 24,500. PCR dipped sharply to 0.7, hinting at sentiment turning cautious.\n\nFIIs added both calls and puts, with a slight tilt toward puts. Proprietary desks were net neutral, while clients leaned heavily on selling puts, reflecting misplaced optimism.\n\nIn futures, FIIs trimmed some longs and DIIs stepped in with buying. The cash segment saw ₹1,200 Cr of FII inflows, but that failed to lift sentiment.\n\nThe intraday reversal suggests that markets may be preparing for a short-term pullback. It\'s a good zone to protect gains and possibly consider hedged bearish setups.'
+            content: 'Markets saw some profit booking today with NIFTY closing down 0.3% at 24,800. Bank NIFTY also closed lower by 0.4% at 52,250.\n\nThe market breadth was negative with decliners outnumbering advancers. The India VIX rose 3% to 14.2, indicating some nervousness.\n\nFIIs were net sellers to the tune of ₹950 crores while DIIs bought ₹750 crores worth of equities.\n\nGlobal cues are mixed with US futures pointing slightly lower and Asian markets trading flat. Crude oil is stable at $82 per barrel.\n\nThe market seems to be taking a breather after the recent rally. Key levels to watch: NIFTY support at 24,600 and resistance at 25,000.'
           }
         ];
 
@@ -157,187 +170,106 @@ const LandingPage = () => {
     }
   };
 
-  // Format timestamp for display
-  const formatTimestamp = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleString('en-IN', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Function to scroll to a section when nav link is clicked
-  const scrollToSection = (sectionId) => {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-bgDark text-white' : 'bg-neutral-lightest text-neutral-DEFAULT'}`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'}`}>
       {/* Navigation Bar */}
-      <nav className={`sticky top-0 z-50 ${isDarkMode ? 'bg-primary-dark' : 'bg-primary-DEFAULT'} shadow-md`}>
+      <nav className={`sticky top-0 z-40 ${isDarkMode ? 'bg-blue-900' : 'bg-blue-800'} shadow-md`}>
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="text-white text-xl font-bold"
-              >
+              <Link to="/" className="text-white text-xl font-bold">
                 Steady Gains
-              </button>
+              </Link>
             </div>
 
-            {/* Navigation Links - Desktop */}
-            <div className="hidden md:flex items-center space-x-6">
+            {/* Navigation Links */}
+            <div className="hidden md:flex items-center space-x-4">
               <button
-                onClick={() => scrollToSection('about')}
-                className="text-white hover:text-white/80 transition-colors duration-200"
+                onClick={() => scrollToSection(featuresRef)}
+                className="text-white hover:text-blue-200 transition-colors duration-200"
               >
-                About
+                Features
               </button>
               <button
-                onClick={() => scrollToSection('aspirations')}
-                className="text-white hover:text-white/80 transition-colors duration-200"
-              >
-                Aspirations
-              </button>
-              <button
-                onClick={() => scrollToSection('market-updates')}
-                className="text-white hover:text-white/80 transition-colors duration-200"
+                onClick={() => scrollToSection(marketUpdatesRef)}
+                className="text-white hover:text-blue-200 transition-colors duration-200"
               >
                 Market Updates
               </button>
               <button
-                onClick={() => scrollToSection('contact')}
-                className="text-white hover:text-white/80 transition-colors duration-200"
+                onClick={() => scrollToSection(testimonialsRef)}
+                className="text-white hover:text-blue-200 transition-colors duration-200"
               >
-                Contact
+                Testimonials
+              </button>
+              <button
+                onClick={() => scrollToSection(pricingRef)}
+                className="text-white hover:text-blue-200 transition-colors duration-200"
+              >
+                Pricing
               </button>
             </div>
 
-            {/* Login Button - Desktop */}
-            <div className="hidden md:block">
+            {/* Dark Mode Toggle and Login Button */}
+            <div className="flex items-center space-x-4">
+              {/* Dark Mode Toggle */}
               <button
-                onClick={() => setLoginSliderOpen(true)}
-                className={`flex items-center justify-center px-4 py-2 rounded-md ${
+                onClick={toggleDarkMode}
+                className={`p-2 rounded-full ${
                   isDarkMode
-                    ? 'bg-accent-blue text-white hover:bg-accent-blue/90'
-                    : 'bg-accent-blue text-white hover:bg-accent-blue/90'
+                    ? 'bg-blue-500 text-white hover:bg-blue-600'
+                    : 'bg-blue-500 text-black hover:bg-blue-600'
                 } transition-colors duration-200`}
+                aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
               >
-                <LoginIcon className="mr-2" fontSize="small" />
-                Login
-              </button>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden flex items-center space-x-4">
-              <button
-                onClick={() => setLoginSliderOpen(true)}
-                className={`flex items-center justify-center px-3 py-1.5 rounded-md ${
-                  isDarkMode
-                    ? 'bg-accent-blue text-white hover:bg-accent-blue/90'
-                    : 'bg-accent-blue text-white hover:bg-accent-blue/90'
-                } transition-colors duration-200`}
-              >
-                <LoginIcon className="mr-1" fontSize="small" />
-                <span className="text-sm">Login</span>
+                {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
               </button>
 
+              {/* Login Button */}
               <button
-                onClick={() => setMobileMenuOpen(true)}
-                className="text-white p-2 focus:outline-none"
+                onClick={() => setLoginSliderOpen(true)}
+                className="flex items-center px-4 py-2 rounded-sm bg-white text-blue-800 hover:bg-gray-100 transition-colors duration-200"
               >
-                <MenuIcon />
+                <LoginIcon className="mr-2" />
+                <span>Login</span>
               </button>
             </div>
           </div>
         </div>
-
-        {/* Mobile menu */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-50 bg-black bg-opacity-75 md:hidden">
-            <div className={`fixed right-0 top-0 w-64 h-full ${isDarkMode ? 'bg-primary-dark' : 'bg-primary-DEFAULT'} p-5`}>
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-xl font-bold text-white">Menu</h2>
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-white p-2 focus:outline-none"
-                >
-                  <CloseIcon />
-                </button>
-              </div>
-
-              <div className="flex flex-col space-y-4">
-                <button
-                  onClick={() => {
-                    scrollToSection('about');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
-                >
-                  About
-                </button>
-                <button
-                  onClick={() => {
-                    scrollToSection('aspirations');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
-                >
-                  Aspirations
-                </button>
-                <button
-                  onClick={() => {
-                    scrollToSection('market-updates');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
-                >
-                  Market Updates
-                </button>
-                <button
-                  onClick={() => {
-                    scrollToSection('contact');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-white hover:text-white/80 transition-colors duration-200 py-2 border-b border-white/10 text-left"
-                >
-                  Contact
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* Hero Section */}
       <section className={`py-16 px-4 ${isDarkMode ? 'bg-primary-dark' : 'bg-primary-DEFAULT'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            <h1 className={`text-4xl md:text-5xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-black'}`}>
               Welcome to Steady Gains
             </h1>
-            <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
+            <p className={`text-xl mb-8 max-w-3xl mx-auto ${isDarkMode ? 'text-white/90' : 'text-black'}`}>
               A disciplined approach to trading with consistent returns and risk management
             </p>
-            <div className="flex justify-center">
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <button
+                onClick={() => document.getElementById('market-updates').scrollIntoView({ behavior: 'smooth' })}
+                className={`flex items-center justify-center px-6 py-3 rounded-md ${
+                  isDarkMode
+                    ? 'bg-accent-blue text-white hover:bg-accent-blue/80'
+                    : 'bg-accent-blue text-white hover:bg-accent-blue/80'
+                } transition-colors duration-200`}
+              >
+                Market Updates
+              </button>
               <Link
                 to="/public/market-updates"
                 className={`flex items-center justify-center px-6 py-3 rounded-md ${
                   isDarkMode
                     ? 'bg-transparent border border-white text-white hover:bg-white/10'
-                    : 'bg-transparent border border-white text-white hover:bg-white/10'
+                    : 'bg-transparent border border-black text-black hover:bg-black/10'
                 } transition-colors duration-200`}
               >
-                View Market Updates
+                View All Updates
               </Link>
             </div>
           </div>
@@ -479,7 +411,63 @@ const LandingPage = () => {
             </div>
           ) : (
             <div className="space-y-8">
-              {marketUpdates.slice(0, 3).map((update) => (
+              {/* Featured Latest Update */}
+              {marketUpdates.length > 0 && (
+                <div className={`p-8 rounded-lg border-2 ${
+                  isDarkMode
+                    ? 'border-accent-blue bg-neutral-DEFAULT'
+                    : 'border-accent-blue bg-white'
+                } shadow-lg`}>
+                  <div className="flex items-center mb-2">
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
+                      isDarkMode ? 'bg-accent-blue text-white' : 'bg-accent-blue/20 text-accent-blue'
+                    } mr-2`}>
+                      Latest Update
+                    </span>
+                    <span className={`text-sm ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>
+                      {formatTimestamp(marketUpdates[0].timestamp)}
+                    </span>
+                  </div>
+
+                  <h3 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+                    {marketUpdates[0].title}
+                  </h3>
+
+                  <div className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} whitespace-pre-line mb-6`}>
+                    <p className="text-lg">
+                      {marketUpdates[0].content.split('\n\n')[0]}
+                    </p>
+
+                    {marketUpdates[0].content.split('\n\n').length > 1 && (
+                      <div className="mt-4">
+                        <p>
+                          {marketUpdates[0].content.split('\n\n')[1]}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex justify-end">
+                    <Link
+                      to="/public/market-updates"
+                      className={`inline-flex items-center px-4 py-2 rounded-md ${
+                        isDarkMode
+                          ? 'bg-accent-blue text-white hover:bg-accent-blue/80'
+                          : 'bg-accent-blue text-white hover:bg-accent-blue/80'
+                      } transition-colors duration-200`}
+                    >
+                      Read Full Update <ArrowForwardIcon className="ml-1" fontSize="small" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {/* Recent Updates */}
+              <h3 className={`text-xl font-semibold mt-12 mb-6 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+                Recent Updates
+              </h3>
+
+              {marketUpdates.slice(1, 3).map((update) => (
                 <div
                   key={update.id}
                   className={`p-6 rounded-lg border ${
@@ -520,7 +508,7 @@ const LandingPage = () => {
                   className={`inline-flex items-center justify-center px-6 py-3 rounded-md ${
                     isDarkMode
                       ? 'bg-primary-DEFAULT text-white hover:bg-primary-light'
-                      : 'bg-primary-DEFAULT text-white hover:bg-primary-light'
+                      : 'bg-primary-DEFAULT text-black hover:bg-primary-light'
                   } transition-colors duration-200`}
                 >
                   View All Market Updates <ArrowForwardIcon className="ml-2" fontSize="small" />
@@ -584,7 +572,7 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className={`py-8 px-4 ${isDarkMode ? 'bg-primary-dark text-white' : 'bg-primary-DEFAULT text-white'}`}>
+      <footer className={`py-8 px-4 ${isDarkMode ? 'bg-blue-900' : 'bg-blue-800'} text-white shadow-md`}>
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -793,3 +781,11 @@ const LandingPage = () => {
 };
 
 export default LandingPage;
+
+
+
+
+
+
+
+

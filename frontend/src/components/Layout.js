@@ -79,7 +79,7 @@ function Layout({ children }) {
       <div
         className={`fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 ease-in-out md:hidden ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } ${isDarkMode ? 'bg-primary-dark' : 'bg-primary-DEFAULT'} text-white`}
+        } ${isDarkMode ? 'bg-blue-900' : 'bg-blue-800'} text-white`}
       >
         {/* Close button for mobile */}
         <div className="absolute top-0 right-0 p-1 m-2">
@@ -112,10 +112,10 @@ function Layout({ children }) {
                 className={`flex items-center px-6 py-3 ${activeClasses} hover:bg-primary-light transition-colors duration-200`}
                 onClick={() => setSidebarOpen(false)} // Close sidebar on mobile when a link is clicked
               >
-                <span className={`mr-3 ${isActive ? 'text-white' : 'text-neutral-lighter'}`}>
+                <span className={`mr-3 ${isActive ? 'text-white' : 'text-white/80'}`}>
                   {item.icon}
                 </span>
-                <span className={`${isActive ? 'text-white font-medium' : 'text-neutral-lighter font-normal'}`}>
+                <span className={`${isActive ? 'text-white font-medium' : 'text-white/80 font-normal'}`}>
                   {item.name}
                 </span>
               </Link>
@@ -125,14 +125,14 @@ function Layout({ children }) {
 
         {/* Footer area */}
         <div className="absolute bottom-0 w-64 p-4 border-t border-opacity-20 border-white">
-          <div className="text-xs text-neutral-lighter text-center">
+          <div className="text-xs text-white text-center">
             © 2025 Steady Gains
           </div>
         </div>
       </div>
 
       {/* Sidebar for desktop - always visible */}
-      <div className={`hidden md:block w-64 ${isDarkMode ? 'bg-primary-dark' : 'bg-primary-DEFAULT'} text-white`}>
+      <div className={`hidden md:block w-64 ${isDarkMode ? 'bg-blue-900' : 'bg-blue-800'} text-white`}>
         {/* Logo area */}
         <div className="p-6 border-b border-opacity-20 border-white">
           <h1 className="text-xl font-bold tracking-tight text-white">Steady Gains</h1>
@@ -153,10 +153,10 @@ function Layout({ children }) {
                 to={item.href}
                 className={`flex items-center px-6 py-3 ${activeClasses} hover:bg-primary-light transition-colors duration-200`}
               >
-                <span className={`mr-3 ${isActive ? 'text-white' : 'text-neutral-lighter'}`}>
+                <span className={`mr-3 ${isActive ? 'text-white' : 'text-white/80'}`}>
                   {item.icon}
                 </span>
-                <span className={`${isActive ? 'text-white font-medium' : 'text-neutral-lighter font-normal'}`}>
+                <span className={`${isActive ? 'text-white font-medium' : 'text-white/80 font-normal'}`}>
                   {item.name}
                 </span>
               </Link>
@@ -166,7 +166,7 @@ function Layout({ children }) {
 
         {/* Footer area */}
         <div className="absolute bottom-0 w-64 p-4 border-t border-opacity-20 border-white">
-          <div className="text-xs text-neutral-lighter text-center">
+          <div className="text-xs text-white text-center">
             © 2025 Steady Gains
           </div>
         </div>
@@ -197,7 +197,7 @@ function Layout({ children }) {
                 {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
               </button>
               <div className="flex items-center">
-                <div className="h-8 w-8 rounded-full bg-primary-light text-white flex items-center justify-center mr-2 text-sm font-medium">
+                <div className={`h-8 w-8 rounded-full bg-primary-light ${isDarkMode ? 'text-white' : 'text-black'} flex items-center justify-center mr-2 text-sm font-medium`}>
                   {currentUser?.name?.charAt(0) || 'U'}
                 </div>
                 <div className={`hidden sm:block font-medium ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>{currentUser?.name}</div>

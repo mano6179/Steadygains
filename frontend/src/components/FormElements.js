@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '../context/ThemeContext';
 
-// Button component with financial sector styling
+// Button component with improved visibility and Business Line styling
 export const Button = ({ children, primary, className, ...props }) => {
   const { isDarkMode } = useTheme();
 
@@ -9,7 +9,7 @@ export const Button = ({ children, primary, className, ...props }) => {
     <button
       className={`px-4 py-2 rounded-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
         primary
-          ? "bg-primary-DEFAULT hover:bg-primary-light text-white focus:ring-primary-light"
+          ? `bg-primary-DEFAULT hover:bg-primary-dark ${isDarkMode ? 'text-white' : 'text-black'} focus:ring-primary-light`
           : `${isDarkMode
               ? 'bg-neutral-DEFAULT hover:bg-neutral-light text-white'
               : 'bg-white hover:bg-neutral-lightest text-neutral-DEFAULT'}
@@ -23,23 +23,25 @@ export const Button = ({ children, primary, className, ...props }) => {
   );
 };
 
-// Input component with financial sector styling
+// Input component with improved visibility
 export const Input = ({ label, className, ...props }) => {
   const { isDarkMode } = useTheme();
 
   return (
     <div className="mb-4">
       {label && (
-        <label className={`block text-sm font-medium ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'} mb-2`}>
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'
+        }`}>
           {label}
         </label>
       )}
       <input
-        className={`w-full px-3 py-2 ${
+        className={`w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-primary-light ${
           isDarkMode
-            ? 'bg-neutral-DEFAULT border-neutral-light text-black'
-            : 'bg-white border-neutral-lighter text-black'
-        } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
+            ? 'bg-neutral-dark border-neutral-light text-white'
+            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+        } ${className}`}
         {...props}
       />
     </div>
@@ -70,31 +72,29 @@ export const Card = ({ children, title, className }) => {
   );
 };
 
-// Select component with financial sector styling
+// Select component with improved visibility
 export const Select = ({ label, options, className, ...props }) => {
   const { isDarkMode } = useTheme();
 
   return (
     <div className="mb-4">
       {label && (
-        <label className={`block text-sm font-medium ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'} mb-2`}>
+        <label className={`block text-sm font-medium mb-2 ${
+          isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'
+        }`}>
           {label}
         </label>
       )}
       <select
-        className={`w-full px-3 py-2 ${
+        className={`w-full px-3 py-2 border rounded-sm focus:outline-none focus:ring-2 focus:ring-primary-light ${
           isDarkMode
-            ? 'bg-neutral-DEFAULT border-neutral-light text-black'
-            : 'bg-white border-neutral-lighter text-black'
-        } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
+            ? 'bg-neutral-dark border-neutral-light text-white'
+            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+        } ${className}`}
         {...props}
       >
         {options.map((option) => (
-          <option
-            key={option.value}
-            value={option.value}
-            className="bg-white text-black"
-          >
+          <option key={option.value} value={option.value}>
             {option.label}
           </option>
         ))}
@@ -158,7 +158,7 @@ export const Table = ({ headers, data, className }) => {
                 <td
                   key={cellIndex}
                   className={`px-6 py-4 whitespace-nowrap text-sm ${
-                    isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'
+                    isDarkMode ? 'text-neutral-lighter' : 'text-neutral-DEFAULT'
                   }`}
                 >
                   {cell}
@@ -171,4 +171,6 @@ export const Table = ({ headers, data, className }) => {
     </div>
   );
 };
+
+
 
