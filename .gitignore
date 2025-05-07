@@ -35,6 +35,8 @@ __pycache__/
 *.so
 .Python
 env/
+venv/
+venv*/
 build/
 develop-eggs/
 dist/
@@ -50,6 +52,11 @@ var/
 .installed.cfg
 *.egg
 
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
 # Logs
 logs
 *.log
@@ -60,3 +67,9 @@ yarn-error.log*
 # Testing
 /coverage
 .nyc_output
+
+# Script files
+install_dependencies.sh
+install_packages.py
+run_frontend.sh
+test_auth.py
