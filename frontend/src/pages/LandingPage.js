@@ -27,10 +27,10 @@ const LandingPage = () => {
   const [loginSliderOpen, setLoginSliderOpen] = useState(false);
 
   // Refs for scrolling to sections
-  const featuresRef = useRef(null);
+  const aboutRef = useRef(null);
+  const aspirationsRef = useRef(null);
   const marketUpdatesRef = useRef(null);
-  const testimonialsRef = useRef(null);
-  const pricingRef = useRef(null);
+  const contactRef = useRef(null);
 
   // Login form state
   const [email, setEmail] = useState('');
@@ -186,10 +186,16 @@ const LandingPage = () => {
             {/* Navigation Links */}
             <div className="hidden md:flex items-center space-x-4">
               <button
-                onClick={() => scrollToSection(featuresRef)}
+                onClick={() => scrollToSection(aboutRef)}
                 className="text-white hover:text-blue-200 transition-colors duration-200"
               >
-                Features
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection(aspirationsRef)}
+                className="text-white hover:text-blue-200 transition-colors duration-200"
+              >
+                Aspirations
               </button>
               <button
                 onClick={() => scrollToSection(marketUpdatesRef)}
@@ -198,16 +204,10 @@ const LandingPage = () => {
                 Market Updates
               </button>
               <button
-                onClick={() => scrollToSection(testimonialsRef)}
+                onClick={() => scrollToSection(contactRef)}
                 className="text-white hover:text-blue-200 transition-colors duration-200"
               >
-                Testimonials
-              </button>
-              <button
-                onClick={() => scrollToSection(pricingRef)}
-                className="text-white hover:text-blue-200 transition-colors duration-200"
-              >
-                Pricing
+                Contact Us
               </button>
             </div>
 
@@ -277,7 +277,7 @@ const LandingPage = () => {
       </section>
 
       {/* About Fund Section */}
-      <section id="about" className="py-16 px-4">
+      <section id="about" ref={aboutRef} className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
@@ -333,7 +333,7 @@ const LandingPage = () => {
       </section>
 
       {/* Fund Aspirations */}
-      <section id="aspirations" className={`py-16 px-4 ${isDarkMode ? 'bg-neutral-dark' : 'bg-neutral-lightest'}`}>
+      <section id="aspirations" ref={aspirationsRef} className={`py-16 px-4 ${isDarkMode ? 'bg-neutral-dark' : 'bg-neutral-lightest'}`}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
@@ -385,7 +385,7 @@ const LandingPage = () => {
       </section>
 
       {/* Market Updates Section */}
-      <section id="market-updates" className="py-16 px-4">
+      <section id="market-updates" ref={marketUpdatesRef} className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
@@ -519,7 +519,7 @@ const LandingPage = () => {
         </div>
       </section>
       {/* Contact Section */}
-      <section id="contact" className="py-16 px-4">
+      <section id="contact" ref={contactRef} className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className={`text-3xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
