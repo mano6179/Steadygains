@@ -37,8 +37,8 @@ export const Input = ({ label, className, ...props }) => {
       <input
         className={`w-full px-3 py-2 ${
           isDarkMode
-            ? 'bg-neutral-DEFAULT border-neutral-light text-white'
-            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+            ? 'bg-neutral-DEFAULT border-neutral-light text-black'
+            : 'bg-white border-neutral-lighter text-black'
         } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
         {...props}
       />
@@ -84,8 +84,8 @@ export const Select = ({ label, options, className, ...props }) => {
       <select
         className={`w-full px-3 py-2 ${
           isDarkMode
-            ? 'bg-neutral-DEFAULT border-neutral-light text-white'
-            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+            ? 'bg-neutral-DEFAULT border-neutral-light text-black'
+            : 'bg-white border-neutral-lighter text-black'
         } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
         {...props}
       >
@@ -118,8 +118,8 @@ export const Textarea = ({ label, className, rows = 4, ...props }) => {
         rows={rows}
         className={`w-full px-3 py-2 ${
           isDarkMode
-            ? 'bg-neutral-DEFAULT border-neutral-light text-white'
-            : 'bg-white border-neutral-lighter text-neutral-DEFAULT'
+            ? 'bg-neutral-DEFAULT border-neutral-light text-black'
+            : 'bg-white border-neutral-lighter text-black'
         } border rounded-sm shadow-sm focus:outline-none focus:ring-1 focus:ring-primary-accent focus:border-primary-accent ${className}`}
         {...props}
       />

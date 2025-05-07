@@ -1,94 +1,133 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
-import axios from 'axios';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Card } from '../components/FormElements';
 
 function TradeLog() {
   const { isDarkMode } = useTheme();
-  const [trades, setTrades] = useState([]);
   const [activeTrades, setActiveTrades] = useState([]);
   const [lastMarketUpdate, setLastMarketUpdate] = useState(null);
-  const [formData, setFormData] = useState({
-    symbol: '',
-    strategy: '',
-    entry_exit: 'entry',
-    quantity: '',
-    premium: '',
-    date: new Date().toISOString().split('T')[0],
-    notes: '',
-    tags: [],
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchTrades();
     fetchActiveTrades();
     fetchLastMarketUpdate();
   }, []);
 
-  const fetchTrades = async () => {
-    try {
-      const response = await axios.get('http://localhost:8000/api/trades');
-      setTrades(response.data);
-    } catch (error) {
-      console.error('Error fetching trades:', error);
-    }
+  // Format currency
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(value);
   };
 
   const fetchActiveTrades = async () => {
     try {
-      // In a real app, this would be an API call
-      // const response = await axios.get('http://localhost:8000/api/trades/active');
+      // Get logs from localStorage
+      const storedLogsJSON = localStorage.getItem('steadyGainsLogs');
 
-      // Mock data for demonstration
-      const mockActiveTrades = [
-        {
-          id: 1,
-          symbol: 'NIFTY',
-          strategy: 'Iron Condor',
-          entry_exit: 'entry',
-          quantity: 50,
-          premium: 1500,
-          date: '2023-06-15',
-          notes: 'Weekly expiry trade',
-          realized_pnl: 0,
-          unrealized_pnl: 300
-        },
-        {
-          id: 2,
-          symbol: 'BANKNIFTY',
-          strategy: 'Strangle',
-          entry_exit: 'entry',
-          quantity: 25,
-          premium: 2200,
-          date: '2023-06-18',
-          notes: 'Monthly expiry trade',
-          realized_pnl: 0,
-          unrealized_pnl: -150
-        }
-      ];
+      if (storedLogsJSON) {
+        const allLogs = JSON.parse(storedLogsJSON);
 
-      setActiveTrades(mockActiveTrades);
+        // Filter to get only trade logs with entry_exit = 'entry'
+        const tradeLogs = allLogs
+          .filter(log => log.type === 'trade' && log.entry_exit === 'entry')
+          .map(log => ({
+            id: log.id,
+            symbol: log.symbol,
+            strategy: log.strategy,
+            entry_exit: log.entry_exit,
+            quantity: log.quantity,
+            premium: log.premium,
+            date: log.date || new Date(log.timestamp).toISOString().split('T')[0],
+            notes: log.notes || '',
+            // Mock P&L data for demonstration
+            unrealized_pnl: Math.floor(Math.random() * 2000) - 1000
+          }));
+
+        setActiveTrades(tradeLogs);
+      } else {
+        // If no logs in localStorage, use mock data
+        const mockActiveTrades = [
+          {
+            id: 1,
+            symbol: 'NIFTY',
+            strategy: 'Iron Condor',
+            entry_exit: 'entry',
+            quantity: 50,
+            premium: 1500,
+            date: '2023-06-15',
+            notes: 'Weekly expiry trade',
+            unrealized_pnl: 300
+          },
+          {
+            id: 2,
+            symbol: 'BANKNIFTY',
+            strategy: 'Strangle',
+            entry_exit: 'entry',
+            quantity: 25,
+            premium: 2200,
+            date: '2023-06-18',
+            notes: 'Monthly expiry trade',
+            unrealized_pnl: -150
+          }
+        ];
+
+        setActiveTrades(mockActiveTrades);
+      }
     } catch (error) {
       console.error('Error fetching active trades:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchLastMarketUpdate = async () => {
     try {
-      // In a real app, this would be an API call
-      // const response = await axios.get('http://localhost:8000/api/market-updates/latest');
+      // Get logs from localStorage
+      const storedLogsJSON = localStorage.getItem('steadyGainsLogs');
 
-      // Mock data for demonstration
-      const mockLastUpdate = {
-        id: 1,
-        title: 'Market Update - June 20, 2023',
-        content: 'Markets closed higher today with Nifty up 0.8% and Bank Nifty up 1.2%. FIIs were net buyers while DIIs were net sellers. Global markets were mixed with US futures pointing slightly higher.',
-        timestamp: '2023-06-20T16:30:00'
-      };
+      if (storedLogsJSON) {
+        const allLogs = JSON.parse(storedLogsJSON);
 
-      setLastMarketUpdate(mockLastUpdate);
+        // Filter to get only market_update logs and sort by timestamp (newest first)
+        const marketUpdates = allLogs
+          .filter(log => log.type === 'market_update')
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+        // Get the latest market update
+        if (marketUpdates.length > 0) {
+          setLastMarketUpdate({
+            id: marketUpdates[0].id,
+            title: marketUpdates[0].title,
+            content: marketUpdates[0].content,
+            timestamp: marketUpdates[0].timestamp
+          });
+        } else {
+          // If no market updates in localStorage, use mock data
+          const mockLastUpdate = {
+            id: 1,
+            title: 'Market Update - June 20, 2023',
+            content: 'Markets closed higher today with Nifty up 0.8% and Bank Nifty up 1.2%. FIIs were net buyers while DIIs were net sellers. Global markets were mixed with US futures pointing slightly higher.',
+            timestamp: '2023-06-20T16:30:00'
+          };
+
+          setLastMarketUpdate(mockLastUpdate);
+        }
+      } else {
+        // If no logs in localStorage, use mock data
+        const mockLastUpdate = {
+          id: 1,
+          title: 'Market Update - June 20, 2023',
+          content: 'Markets closed higher today with Nifty up 0.8% and Bank Nifty up 1.2%. FIIs were net buyers while DIIs were net sellers. Global markets were mixed with US futures pointing slightly higher.',
+          timestamp: '2023-06-20T16:30:00'
+        };
+
+        setLastMarketUpdate(mockLastUpdate);
+      }
     } catch (error) {
       console.error('Error fetching last market update:', error);
     }
@@ -97,165 +136,37 @@ function TradeLog() {
   const handleDelete = async (tradeId) => {
     if (!window.confirm('Are you sure you want to delete this trade?')) return;
     try {
-      await axios.delete(`http://localhost:8000/api/trades/${tradeId}`);
-      setTrades((prev) => prev.filter((t) => t.id !== tradeId));
+      // Get logs from localStorage
+      const storedLogsJSON = localStorage.getItem('steadyGainsLogs');
+
+      if (storedLogsJSON) {
+        const allLogs = JSON.parse(storedLogsJSON);
+
+        // Remove the trade with the specified ID
+        const updatedLogs = allLogs.filter(log => log.id !== tradeId);
+
+        // Save updated logs to localStorage
+        localStorage.setItem('steadyGainsLogs', JSON.stringify(updatedLogs));
+      }
+
+      // Update the UI
+      setActiveTrades((prev) => prev.filter((t) => t.id !== tradeId));
     } catch (error) {
       alert('Failed to delete trade.');
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('http://localhost:8000/api/trades', formData);
-      setFormData({
-        symbol: '',
-        strategy: '',
-        entry_exit: 'entry',
-        quantity: '',
-        premium: '',
-        date: new Date().toISOString().split('T')[0],
-        notes: '',
-        tags: [],
-      });
-      fetchTrades();
-      fetchActiveTrades();
-    } catch (error) {
-      console.error('Error creating trade:', error);
-    }
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   return (
     <div className="space-y-6">
-      <div className={`p-6 rounded-lg shadow ${
-        isDarkMode ? 'bg-gray-800' : 'bg-white'
-      }`}>
-        <h2 className="text-xl font-bold mb-4">Add New Trade</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-sm font-medium">Symbol</label>
-              <input
-                type="text"
-                name="symbol"
-                value={formData.symbol}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Strategy</label>
-              <select
-                name="strategy"
-                value={formData.strategy}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              >
-                <option value="">Select Strategy</option>
-                <option value="iron_condor">Iron Condor</option>
-                <option value="straddle">Straddle</option>
-                <option value="strangle">Strangle</option>
-                <option value="butterfly">Butterfly</option>
-                <option value="calendar">Calendar Spread</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Entry/Exit</label>
-              <select
-                name="entry_exit"
-                value={formData.entry_exit}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              >
-                <option value="entry">Entry</option>
-                <option value="exit">Exit</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Quantity</label>
-              <input
-                type="number"
-                name="quantity"
-                value={formData.quantity}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Premium</label>
-              <input
-                type="number"
-                name="premium"
-                value={formData.premium}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium">Date</label>
-              <input
-                type="date"
-                name="date"
-                value={formData.date}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-md ${
-                  isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-                } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-                required
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium">Notes</label>
-            <textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleChange}
-              rows={3}
-              className={`mt-1 block w-full rounded-md ${
-                isDarkMode ? 'bg-gray-700 border-gray-600' : 'border-gray-300'
-              } shadow-sm focus:border-indigo-500 focus:ring-indigo-500`}
-            />
-          </div>
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className={`inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md ${isDarkMode ? 'text-white bg-primary' : 'text-primary bg-white border-primary'} hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary`}
-            >
-              Add Trade
-            </button>
-          </div>
-        </form>
-      </div>
-
       <Card title="Active Trades">
         <div className="overflow-x-auto">
-          {activeTrades.length === 0 ? (
+          {loading ? (
             <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
-              No active trades found.
+              Loading trades...
+            </p>
+          ) : activeTrades.length === 0 ? (
+            <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+              No active trades found. Add trades using the Logger.
             </p>
           ) : (
             <table className="min-w-full divide-y divide-gray-200">
@@ -276,10 +187,10 @@ function TradeLog() {
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.symbol}</td>
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.strategy}</td>
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.quantity}</td>
-                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>₹{trade.premium}</td>
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{formatCurrency(trade.premium)}</td>
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>{trade.date}</td>
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${trade.unrealized_pnl >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
-                      ₹{trade.unrealized_pnl.toFixed(2)}
+                      {formatCurrency(trade.unrealized_pnl)}
                     </td>
                     <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
                       <IconButton aria-label="delete" color="error" onClick={() => handleDelete(trade.id)}>
@@ -296,9 +207,13 @@ function TradeLog() {
 
       {/* Last Market Update */}
       <Card title="Latest Market Update">
-        {!lastMarketUpdate ? (
+        {loading ? (
           <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
-            No market updates found.
+            Loading market update...
+          </p>
+        ) : !lastMarketUpdate ? (
+          <p className={`text-center py-4 ${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}`}>
+            No market updates found. Add market updates using the Logger.
           </p>
         ) : (
           <div className={`p-4 rounded-sm ${isDarkMode ? 'bg-neutral-DEFAULT' : 'bg-white'}`}>

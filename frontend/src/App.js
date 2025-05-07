@@ -1,13 +1,15 @@
 import React from 'react';
 import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
+import PublicLayout from './components/PublicLayout';
 import LoggerForm from './pages/LoggerForm';
 import WeeklyUpdatesList from './pages/WeeklyUpdatesList';
+import MarketUpdates from './pages/MarketUpdates';
+import PublicMarketUpdates from './pages/PublicMarketUpdates';
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import NAVTrackerDetailed from './pages/NAVTrackerDetailed';
-import Login from './pages/Login';
 import TradeLog from './pages/TradeLog';
-import ExcelUploadPage from './pages/ExcelUploadPage';
 import Indicators from './pages/Indicators';
 import EconomicCalendar from './pages/EconomicCalendar';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -20,9 +22,17 @@ function App() {
       <AuthProvider>
         <Router>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
 
-            <Route path="/" element={
+            <Route path="/public/market-updates" element={
+              <PublicLayout>
+                <PublicMarketUpdates />
+              </PublicLayout>
+            } />
+
+            {/* Protected routes */}
+            <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Layout>
                   <Dashboard />
@@ -78,16 +88,19 @@ function App() {
               </ProtectedRoute>
             } />
 
-            <Route path="/excel-upload" element={
-              <ProtectedRoute requiredRole="admin">
+            <Route path="/market-updates" element={
+              <ProtectedRoute requiredRole="investor">
                 <Layout>
-                  <ExcelUploadPage />
+                  <MarketUpdates />
                 </Layout>
               </ProtectedRoute>
             } />
 
-            {/* Redirect any unknown routes to dashboard */}
+            {/* Redirect any unknown routes */}
             <Route path="*" element={<Navigate to="/" replace />} />
+
+            {/* Fallback for old login route */}
+            <Route path="/login" element={<Navigate to="/" replace />} />
           </Routes>
         </Router>
       </AuthProvider>

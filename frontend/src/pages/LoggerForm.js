@@ -46,23 +46,30 @@ const LoggerForm = () => {
     fetchLogs();
   }, []);
 
-  // Fetch logs from the server
+  // Fetch logs from localStorage
   const fetchLogs = async () => {
     try {
       setLogsLoading(true);
-      // In a real app, this would be an API call
-      // const response = await axios.get('http://localhost:8000/api/logs');
 
-      // Mock data for demonstration
-      const mockLogs = [
-        { id: 1, type: 'weekly_profit', timestamp: '2023-06-01T10:00:00', profit: 5000, charges: 200, funds_in_out: 0 },
-        { id: 2, type: 'iv_tracker', timestamp: '2023-06-02T11:30:00', symbol: 'NIFTY', strike: 18500, expiry: '2023-06-29', iv: 15.5 },
-        { id: 3, type: 'trade', timestamp: '2023-06-03T14:15:00', symbol: 'BANKNIFTY', strategy: 'Iron Condor', entry_exit: 'entry', quantity: 25, premium: 1200 },
-        { id: 4, type: 'market_update', timestamp: '2023-06-04T09:00:00', title: 'Market Opening Update', content: 'Markets opened flat with mixed global cues.' },
-        { id: 5, type: 'weekly_profit', timestamp: '2023-06-08T16:30:00', profit: 7500, charges: 300, funds_in_out: 10000 },
-      ];
+      // Get logs from localStorage or use default mock data if none exists
+      const storedLogs = localStorage.getItem('steadyGainsLogs');
 
-      setLogs(mockLogs);
+      if (storedLogs) {
+        setLogs(JSON.parse(storedLogs));
+      } else {
+        // Initial mock data
+        const mockLogs = [
+          { id: 1, type: 'weekly_profit', timestamp: '2023-06-01T10:00:00', profit: 5000, charges: 200, funds_in_out: 0 },
+          { id: 2, type: 'iv_tracker', timestamp: '2023-06-02T11:30:00', symbol: 'NIFTY', strike: 18500, expiry: '2023-06-29', iv: 15.5 },
+          { id: 3, type: 'trade', timestamp: '2023-06-03T14:15:00', symbol: 'BANKNIFTY', strategy: 'Iron Condor', entry_exit: 'entry', quantity: 25, premium: 1200 },
+          { id: 4, type: 'market_update', timestamp: '2023-06-04T09:00:00', title: 'Market Opening Update', content: 'Markets opened flat with mixed global cues.' },
+          { id: 5, type: 'weekly_profit', timestamp: '2023-06-08T16:30:00', profit: 7500, charges: 300, funds_in_out: 10000 },
+        ];
+
+        // Save initial data to localStorage
+        localStorage.setItem('steadyGainsLogs', JSON.stringify(mockLogs));
+        setLogs(mockLogs);
+      }
     } catch (err) {
       console.error('Error fetching logs:', err);
     } finally {
@@ -84,7 +91,6 @@ const LoggerForm = () => {
       iv: '',
 
       // Trade fields
-      symbol: '',
       strategy: '',
       entry_exit: 'entry',
       quantity: '',
@@ -115,14 +121,16 @@ const LoggerForm = () => {
     try {
       // Prepare data based on log type
       const timestamp = `${date}T${time}:00`;
-      let endpoint = '';
-      let payload = { timestamp };
+      let newLog = {
+        id: Date.now(), // Use timestamp as unique ID
+        type: logType,
+        timestamp
+      };
 
       switch(logType) {
         case 'weekly_profit':
-          endpoint = 'weekly-profit';
-          payload = {
-            ...payload,
+          newLog = {
+            ...newLog,
             profit: parseFloat(formData.profit),
             charges: parseFloat(formData.charges),
             funds_in_out: 0
@@ -130,9 +138,8 @@ const LoggerForm = () => {
           break;
 
         case 'iv_tracker':
-          endpoint = 'iv-tracker';
-          payload = {
-            ...payload,
+          newLog = {
+            ...newLog,
             symbol: formData.symbol,
             strike: parseFloat(formData.strike),
             expiry: formData.expiry,
@@ -141,9 +148,8 @@ const LoggerForm = () => {
           break;
 
         case 'trade':
-          endpoint = 'trade-log';
-          payload = {
-            ...payload,
+          newLog = {
+            ...newLog,
             symbol: formData.symbol,
             strategy: formData.strategy,
             entry_exit: formData.entry_exit,
@@ -155,9 +161,8 @@ const LoggerForm = () => {
           break;
 
         case 'market_update':
-          endpoint = 'market-update';
-          payload = {
-            ...payload,
+          newLog = {
+            ...newLog,
             title: formData.title,
             content: formData.content
           };
@@ -167,15 +172,21 @@ const LoggerForm = () => {
           throw new Error('Invalid log type');
       }
 
-      // For demo purposes, we'll just log the payload
-      console.log("Endpoint:", endpoint);
-      console.log("Payload:", payload);
+      // For demo purposes, we'll log the new entry
+      console.log("New log entry:", newLog);
 
-      // In a real app, this would be an API call
-      // const response = await axios.post(`http://localhost:8000/api/logger/${endpoint}`, payload);
+      // Get existing logs from localStorage
+      const existingLogsJSON = localStorage.getItem('steadyGainsLogs');
+      const existingLogs = existingLogsJSON ? JSON.parse(existingLogsJSON) : [];
 
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Add new log to the beginning of the array
+      const updatedLogs = [newLog, ...existingLogs];
+
+      // Save updated logs to localStorage
+      localStorage.setItem('steadyGainsLogs', JSON.stringify(updatedLogs));
+
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 500));
 
       setSuccess(`${getLogTypeLabel(logType)} logged successfully!`);
 
@@ -200,10 +211,10 @@ const LoggerForm = () => {
       }
 
       // Refresh the logs
-      fetchLogs();
+      setLogs(updatedLogs);
     } catch (err) {
       console.error('Error submitting log:', err);
-      setError('Failed to submit log. ' + (err.response?.data?.detail || err.message));
+      setError('Failed to submit log. ' + (err.message || 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -288,7 +299,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter profit amount"
               required
-              className="text-black"
             />
 
             <Input
@@ -300,7 +310,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter charges amount"
               required
-              className="text-black"
             />
           </>
         );
@@ -316,7 +325,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter stock symbol (e.g., NIFTY, BANKNIFTY)"
               required
-              className="text-black"
             />
 
             <Input
@@ -328,7 +336,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter strike price"
               required
-              className="text-black"
             />
 
             <Input
@@ -338,7 +345,6 @@ const LoggerForm = () => {
               value={formData.expiry}
               onChange={handleInputChange}
               required
-              className="text-black"
             />
 
             <Input
@@ -350,7 +356,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter IV percentage"
               required
-              className="text-black"
             />
           </>
         );
@@ -367,7 +372,6 @@ const LoggerForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter symbol (e.g., NIFTY, BANKNIFTY)"
                 required
-                className="text-black"
               />
 
               <Input
@@ -378,7 +382,6 @@ const LoggerForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter strategy (e.g., Iron Condor)"
                 required
-                className="text-black"
               />
             </div>
 
@@ -393,7 +396,6 @@ const LoggerForm = () => {
                   { value: 'exit', label: 'Exit' }
                 ]}
                 required
-                className="text-black"
               />
 
               <Input
@@ -404,7 +406,6 @@ const LoggerForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter quantity"
                 required
-                className="text-black"
               />
             </div>
 
@@ -418,7 +419,6 @@ const LoggerForm = () => {
                 onChange={handleInputChange}
                 placeholder="Enter premium amount"
                 required
-                className="text-black"
               />
 
               <Input
@@ -428,7 +428,6 @@ const LoggerForm = () => {
                 value={formData.trade_date}
                 onChange={handleInputChange}
                 required
-                className="text-black"
               />
             </div>
 
@@ -439,7 +438,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter trade notes"
               rows={3}
-              className="text-black"
             />
           </>
         );
@@ -455,7 +453,6 @@ const LoggerForm = () => {
               onChange={handleInputChange}
               placeholder="Enter update title"
               required
-              className="text-black"
             />
 
             <Textarea
@@ -466,7 +463,6 @@ const LoggerForm = () => {
               placeholder="Enter market update content"
               rows={6}
               required
-              className="text-black"
             />
           </>
         );
@@ -491,7 +487,6 @@ const LoggerForm = () => {
               { value: 'market_update', label: 'Market Update' }
             ]}
             required
-            className="text-black"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -501,7 +496,6 @@ const LoggerForm = () => {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="text-black"
             />
 
             <Input
@@ -510,7 +504,6 @@ const LoggerForm = () => {
               value={time}
               onChange={(e) => setTime(e.target.value)}
               required
-              className="text-black"
             />
           </div>
 

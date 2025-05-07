@@ -3,7 +3,7 @@ import { useTheme } from '../context/ThemeContext';
 
 const NAVDataTable = () => {
   const { isDarkMode } = useTheme();
-  
+
   // Mock data based on the provided information
   const navData = [
     {
@@ -86,10 +86,74 @@ const NAVDataTable = () => {
   };
 
   return (
-    <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-neutral-DEFAULT border border-neutral-light' : 'bg-white border border-neutral-lightest'}`}>
+    <div className={`p-4 md:p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-neutral-DEFAULT border border-neutral-light' : 'bg-white border border-neutral-lightest'}`}>
       <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>NAV Data</h3>
-      
-      <div className="overflow-x-auto">
+
+      {/* Mobile view - simplified cards for each entry */}
+      <div className="md:hidden space-y-4">
+        {navData.map((row, index) => (
+          <div
+            key={index}
+            className={`p-3 rounded-sm border ${
+              isDarkMode
+                ? 'border-neutral-light bg-neutral-DEFAULT'
+                : 'border-neutral-lightest bg-white'
+            }`}
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>{row.date}</span>
+              <span className={`font-medium ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>NAV: ₹ {row.nav.toFixed(2)}</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Amount</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {row.amount === 0 ? '₹ -' : formatCurrency(row.amount)}
+                </span>
+              </div>
+
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Fee</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {row.fee === 0 ? '₹ -' : formatCurrency(row.fee)}
+                </span>
+              </div>
+
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Net Amount</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {row.netAmount === 0 ? '₹ -' : formatCurrency(row.netAmount)}
+                </span>
+              </div>
+
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Cumulative</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {formatCurrency(row.cumulativeAmount)}
+                </span>
+              </div>
+
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Investment</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {row.additionalInvestment === 0 ? '₹ -' : formatCurrency(row.additionalInvestment)}
+                </span>
+              </div>
+
+              <div>
+                <span className={`block text-xs ${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Profit/Loss</span>
+                <span className={isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'}>
+                  {row.profitLoss === 0 ? '₹ -' : formatCurrency(row.profitLoss)}
+                </span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop view - full table */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className={isDarkMode ? 'bg-neutral-light' : 'bg-neutral-lightest'}>
             <tr>

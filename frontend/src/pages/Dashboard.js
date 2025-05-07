@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Link } from 'react-router-dom';
+import InvestorSummary from '../components/InvestorSummary';
 
 const Dashboard = () => {
   const { currentUser, isAdmin } = useAuth();
@@ -16,6 +17,9 @@ const Dashboard = () => {
           monitor performance, and stay updated with the latest market trends.
         </p>
       </div>
+
+      {/* Investor Summary - only shown to investors */}
+      <InvestorSummary />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* NAV Card */}
@@ -32,17 +36,22 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        {/* Activity Logs Card */}
+        {/* Activity Logs Card for Admin / Market Updates Card for Investor */}
         <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
-          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>Activity Logs</h3>
+          <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+            {isAdmin() ? 'Activity Logs' : 'Market Updates'}
+          </h3>
           <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-            View all activity logs including IV tracker, trades, market updates, and weekly profits.
+            {isAdmin()
+              ? 'View all activity logs including IV tracker, trades, market updates, and weekly profits.'
+              : 'Stay updated with the latest market trends, analysis, and trading insights.'
+            }
           </p>
           <Link
-            to="/weekly-updates"
+            to={isAdmin() ? '/weekly-updates' : '/market-updates'}
             className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
           >
-            View Logs
+            {isAdmin() ? 'View Logs' : 'View Updates'}
           </Link>
         </div>
 
@@ -72,19 +81,6 @@ const Dashboard = () => {
                 className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-accent-blue text-white'} hover:bg-primary-light transition-colors duration-200`}
               >
                 Open Logger
-              </Link>
-            </div>
-
-            <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
-              <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>Excel Upload</h3>
-              <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-                Upload Excel files to import data into the system.
-              </p>
-              <Link
-                to="/excel-upload"
-                className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-white'} hover:bg-primary-light transition-colors duration-200`}
-              >
-                Upload Excel
               </Link>
             </div>
           </>

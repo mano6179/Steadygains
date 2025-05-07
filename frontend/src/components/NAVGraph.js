@@ -22,7 +22,7 @@ const NAVGraph = () => {
       { date: '26-04-2024', nav: 101.77 },
       { date: '03-05-2024', nav: 102.70 }
     ];
-    
+
     setNavData(mockData);
     setIsLoading(false);
   }, []);
@@ -113,14 +113,14 @@ const NAVGraph = () => {
   };
 
   return (
-    <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-neutral-DEFAULT border border-neutral-light' : 'bg-white border border-neutral-lightest'}`}>
+    <div className={`p-4 md:p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-neutral-DEFAULT border border-neutral-light' : 'bg-white border border-neutral-lightest'}`}>
       <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>NAV History</h3>
       {isLoading ? (
         <p className={`${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>Loading NAV data...</p>
       ) : navData.length === 0 ? (
         <p className={`${isDarkMode ? 'text-neutral-lighter' : 'text-neutral-light'}`}>No NAV history available.</p>
       ) : (
-        <div className="h-64">
+        <div className="h-48 sm:h-56 md:h-64">
           <Line data={chartData} options={chartOptions} />
         </div>
       )}
