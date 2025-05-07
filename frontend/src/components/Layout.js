@@ -26,7 +26,7 @@ const navigation = [
   { name: 'Logger', href: '/logger', icon: <AddIcon fontSize="small" />, roles: ['admin'] },
   { name: 'Public Market Updates', href: '/public/market-updates', icon: <ArticleIcon fontSize="small" />, roles: ['admin', 'investor'] },
   { name: 'Activity Logs', href: '/weekly-updates', icon: <ListAltIcon fontSize="small" />, roles: ['admin'] },
-  { name: 'Market Updates', href: '/market-updates', icon: <ListAltIcon fontSize="small" />, roles: ['investor'] },
+  { name: 'Market Updates', href: '/market-updates', icon: <ArticleIcon fontSize="small" />, roles: ['admin', 'investor'] },
 ];
 
 function Layout({ children }) {

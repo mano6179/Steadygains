@@ -89,7 +89,7 @@ function App() {
             } />
 
             <Route path="/market-updates" element={
-              <ProtectedRoute requiredRole="investor">
+              <ProtectedRoute>
                 <Layout>
                   <MarketUpdates />
                 </Layout>

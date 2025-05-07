@@ -36,24 +36,39 @@ const Dashboard = () => {
           </Link>
         </div>
 
-        {/* Activity Logs Card for Admin / Market Updates Card for Investor */}
+        {/* Market Updates Card */}
         <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
           <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
-            {isAdmin() ? 'Activity Logs' : 'Market Updates'}
+            Market Updates
           </h3>
           <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
-            {isAdmin()
-              ? 'View all activity logs including IV tracker, trades, market updates, and weekly profits.'
-              : 'Stay updated with the latest market trends, analysis, and trading insights.'
-            }
+            Stay updated with the latest market trends, analysis, and trading insights.
           </p>
           <Link
-            to={isAdmin() ? '/weekly-updates' : '/market-updates'}
+            to="/market-updates"
             className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-black'} hover:bg-primary-light transition-colors duration-200`}
           >
-            {isAdmin() ? 'View Logs' : 'View Updates'}
+            View Updates
           </Link>
         </div>
+
+        {/* Activity Logs Card - Admin Only */}
+        {isAdmin() && (
+          <div className={`p-6 rounded-sm shadow-card ${isDarkMode ? 'bg-primary-DEFAULT border border-primary-light' : 'bg-white border border-neutral-lightest'}`}>
+            <h3 className={`text-xl font-semibold mb-2 ${isDarkMode ? 'text-white' : 'text-primary-DEFAULT'}`}>
+              Activity Logs
+            </h3>
+            <p className={`${isDarkMode ? 'text-white' : 'text-neutral-DEFAULT'} mb-4`}>
+              View all activity logs including IV tracker, trades, market updates, and weekly profits.
+            </p>
+            <Link
+              to="/weekly-updates"
+              className={`inline-block px-4 py-2 rounded-sm ${isDarkMode ? 'bg-primary-light text-white' : 'bg-primary-DEFAULT text-black'} hover:bg-primary-light transition-colors duration-200`}
+            >
+              View Logs
+            </Link>
+          </div>
+        )}
 
         {/* Admin-only cards */}
         {isAdmin() && (
